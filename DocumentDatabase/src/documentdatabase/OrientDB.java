@@ -1,5 +1,6 @@
 package documentdatabase;
 
+import com.orientechnologies.orient.core.config.OGlobalConfiguration;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 
@@ -29,26 +30,34 @@ public class OrientDB {
         
         ////////////////////// 2 /////////////////////////
         // OPEN THE DATABASE
-        ODatabaseDocumentTx db = new ODatabaseDocumentTx("remote:localhost/petshop").open("admin", "admin");
-
-        // CREATE A NEW DOCUMENT AND FILL IT
-        ODocument doc = new ODocument("Person");
-        doc.field( "name", "Luke" );
-        doc.field( "surname", "Skywalker" );
-        doc.field( "city", new ODocument("City").field("name","Rome").field("country", "Italy") );
-
-        // SAVE THE DOCUMENT
-        doc.save();
-        db.close();
-        
-        // USE THE DATABASE
-//        ODatabaseDocumentTx db = new ODatabaseDocumentTx("local:/temp/test");
-//        db.open("admin", "admin");
+//        ODatabaseDocumentTx db = new ODatabaseDocumentTx("plocal:database/test").open("orient", "orient");
 //
+//        // CREATE A NEW DOCUMENT AND FILL IT
+//        ODocument doc = new ODocument("Person");
+//        doc.field( "name", "Luke" );
+//        doc.field( "surname", "Skywalker" );
+//        doc.field( "city", new ODocument("City").field("name","Rome").field("country", "Italy") );
+//
+//        // SAVE THE DOCUMENT
+//        doc.save();
+//        db.close();
+        
+        ODatabaseDocumentTx db = new ODatabaseDocumentTx("plocal:/demo").open("root", "orient");
 //        try {
-//          // YOUR CODE
+//            System.out.println(db.getName());
+//            //OGlobalConfiguration.STORAGE_KEEP_OPEN.setValue( false );
 //        } finally {
 //          db.close();
 //        }
+        
+ODocument doc = new ODocument("Person");
+    doc.field( "name", "Luke" );
+    doc.field( "surname", "Skywalker" );
+    doc.field( "city", new ODocument("City").field("name","Rome").field("country", "Italy") );
+
+    // SAVE THE DOCUMENT
+    doc.save();
+
+    db.close();
     }
 }
