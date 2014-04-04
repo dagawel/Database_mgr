@@ -14,7 +14,6 @@ public class CouchDB {
     public static void main(String[] args) { 
         Session s = new Session("localhost", 5984);
         Database db = s.getDatabase("test");
-
         Document doc = db.getDocument("9087be7915aac95b08db7a54ed000df9");
         doc.put("foo", "bar");
         db.saveDocument(doc);

@@ -42,7 +42,7 @@ public class OrientDB {
 //        doc.save();
 //        db.close();
         
-        ODatabaseDocumentTx db = new ODatabaseDocumentTx("plocal:/demo").open("root", "orient");
+        ODatabaseDocumentTx db = new ODatabaseDocumentTx("plocal:/orientdb/databases/demo").open("root", "orientt");
 //        try {
 //            System.out.println(db.getName());
 //            //OGlobalConfiguration.STORAGE_KEEP_OPEN.setValue( false );
@@ -50,14 +50,14 @@ public class OrientDB {
 //          db.close();
 //        }
         
-ODocument doc = new ODocument("Person");
-    doc.field( "name", "Luke" );
-    doc.field( "surname", "Skywalker" );
-    doc.field( "city", new ODocument("City").field("name","Rome").field("country", "Italy") );
+        ODocument doc = new ODocument("Person2");
+        doc.field( "name", "Luke" );
+        //doc.field( "surname", "Skywalker" );
+        //doc.field( "city", new ODocument("City").field("name","Rome").field("country", "Italy") );
 
-    // SAVE THE DOCUMENT
-    doc.save();
+        // SAVE THE DOCUMENT
+        doc.save();
 
-    db.close();
-    }
+        db.close();
+        }
 }
