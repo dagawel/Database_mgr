@@ -8,7 +8,9 @@ package documentdatabase;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  *
@@ -16,6 +18,7 @@ import java.sql.SQLException;
  */
 public class OracleDatabase {
     Connection connection;
+    Statement s;
 
     /**
      * @param args the command line arguments
@@ -25,6 +28,7 @@ public class OracleDatabase {
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             connection = DriverManager.getConnection( "jdbc:oracle:thin:@localhost:1521:XE", "Dagmara", "oracle");
+            s = connection.createStatement();
         } 
         catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -54,8 +58,7 @@ public class OracleDatabase {
     
     public String zapiszKlientRekordy () throws ClassNotFoundException, SQLException {
         String tekst = "";
-        if (connection != null) {
-            java.sql.Statement s = connection.createStatement();
+        if (connection != null) {         
             s.execute("INSERT INTO DAGMARA.Klienci (NIK, NIP, Nazwisko, Imie, Login_ID) VALUES (1, 1, 'Gawel', 'Dagmara', 'Dagawel')");   
             tekst = "Dodano do bazy danych!";
             s.close();
@@ -67,10 +70,30 @@ public class OracleDatabase {
         return tekst;
     }
     
+    public void drukuj () throws SQLException {
+        ResultSet rs = s.executeQuery("SELECT * FROM KLIENCI");
+        while (rs.next()) {
+            System.out.println(rs.getString("NAZWISKO"));
+        }
+        rs.close();
+        s.close();
+        connection.close();
+    }
+    
+    public static String randomString(int len) {
+        char[] str = new char[len];
+        for (int i = 0; i < len; i++) {
+            str[i] = (char) (((int)(Math.random() * 26)) + (int)'A');
+        }
+        return (new String(str, 0, len));
+    }
+    
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         // TODO code application logic here
         OracleDatabase orcl = new OracleDatabase();
-        System.out.println(orcl.zapiszKlientRekordy());
+        orcl.drukuj();
+        //System.out.println(randomString(5));
+        //System.out.println(orcl.zapiszKlientRekordy());
     }
     
 }
