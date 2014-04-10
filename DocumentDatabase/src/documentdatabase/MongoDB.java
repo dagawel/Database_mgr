@@ -8,46 +8,64 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
  
 /**
  * Java + MongoDB Hello world Example
  * 
  */
 public class MongoDB {
-//    public static void main(String[] args) {
-//
-//        try {
-//
-//            /**** Connect to MongoDB ****/
-//            // Since 2.10.0, uses MongoClient
-//            MongoClient mongo = new MongoClient("localhost", 27017);
-//
-//            /**** Get database ****/
-//            // if database doesn't exists, MongoDB will create it for you
-//            DB db = mongo.getDB("test");
-//
-//            /**** Get collection / table from 'testdb' ****/
-//            // if collection doesn't exists, MongoDB will create it for you
-//            DBCollection table = db.getCollection("user");
-//
-//            /**** Insert ****/
-//            // create a document to store key and value
-//            BasicDBObject document = new BasicDBObject();
-//            document.put("name", "dagmara");
-//            document.put("age", 23);
-//            document.put("createdDate", new Date());
-//            table.insert(document);
-//
-//            /**** Find and display ****/
+    public static void main(String[] args) {
+        try {
+            MongoClient mongo = new MongoClient("localhost", 27017);
+            DB db = mongo.getDB("test");
+            System.out.println("Connect to database successfully");
+            char[] haslo = {'m', 'o', 'n', 'g', 'o'}; 
+            boolean auth = db.authenticate("mongo", haslo);
+            System.out.println("Authentication: "+auth);
+
+            DBCollection table = db.getCollection("user");
+            table.drop();
+            System.out.println("Collection user selected successfully");
+
+            BasicDBObject doc = new BasicDBObject("title", "Adventures in Databases");
+            doc.append("url", "http://example.com/databases.txt");
+            doc.append("author", "msmith");
+            doc.append("likes", 20);
+            
+            String[] tabTags = new String[]{"databases", "mongodb", "indexing"};
+            List<String> tags = Arrays.asList(tabTags);
+            doc.append("tags", tags);
+            
+            doc.append("image", new BasicDBObject("url", "http://example.com/databases.txt").
+                                               append("type", "jpg").
+                                               append("size", 75381));
+
+            List<BasicDBObject> comments = new ArrayList<>();
+            BasicDBObject doc1 = new BasicDBObject("user", "bjones");
+            doc1.append("text", "Interesting article!");  
+            BasicDBObject doc2 = new BasicDBObject("user", "blogger");
+            doc2.append("text", "Another related article is at http://example.com/db/db.txt");
+            comments.add(doc1);
+            comments.add(doc2);
+            doc.put("comments", comments);
+   
+            table.insert(doc);
+            System.out.println("Document inserted successfully");
+
 //            BasicDBObject searchQuery = new BasicDBObject();
 //            searchQuery.put("name", "dagmara");
-//
 //            DBCursor cursor = table.find(searchQuery);
-//
-//            while (cursor.hasNext()) {
-//                System.out.println(cursor.next());
-//            }
-//
+
+            DBCursor cursor = table.find();
+            int i = 1;
+            while (cursor.hasNext()) { 
+                System.out.println("Inserted Document: " + i); 
+                System.out.println(cursor.next()); 
+                i++;
+            }
 //            /**** Update ****/
 //            // search document where name="mkyong" and update it with new values
 //            BasicDBObject query = new BasicDBObject();
@@ -72,27 +90,27 @@ public class MongoDB {
 //
 //            /**** Done ****/
 //            System.out.println("Done");
-//
-//        } catch (UnknownHostException e) {
-//            e.printStackTrace();
-//        } catch (MongoException e) {
-//            e.printStackTrace();
-//        }
-//        
-//    }
+
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (MongoException e) {
+            e.printStackTrace();
+        }
+        
+    }
     /////////////
-    public static void main( String args[] ){
-      try{   
-		 // To connect to mongodb server
-         MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
-         // Now connect to your databases
-         DB db = mongoClient.getDB( "test" );
-		 System.out.println("Connect to database successfully");
-         char[] haslo = {'m', 'o', 'n', 'g', 'o'}; 
-         boolean auth = db.authenticate("mongo", haslo);
-		 System.out.println("Authentication: "+auth);
-      }catch(Exception e){
-	     System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-	  }
-   }
+//    public static void main( String args[] ){
+//      try{   
+//		 // To connect to mongodb server
+//         MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
+//         // Now connect to your databases
+//         DB db = mongoClient.getDB( "test" );
+//		 System.out.println("Connect to database successfully");
+//         char[] haslo = {'m', 'o', 'n', 'g', 'o'}; 
+//         boolean auth = db.authenticate("mongo", haslo);
+//		 System.out.println("Authentication: "+auth);
+//      }catch(Exception e){
+//	     System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+//	  }
+//   }
 }
