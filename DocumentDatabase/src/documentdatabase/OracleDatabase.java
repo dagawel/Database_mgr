@@ -6,11 +6,15 @@
 
 package documentdatabase;
 
+import static documentdatabase.MongoDB.tabelaStringow;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  *
@@ -91,9 +95,26 @@ public class OracleDatabase {
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         // TODO code application logic here
         OracleDatabase orcl = new OracleDatabase();
-        orcl.drukuj();
+        //orcl.drukuj();
         //System.out.println(randomString(5));
         //System.out.println(orcl.zapiszKlientRekordy());
+        
+        String[] strTagi = tabelaStringow(20, 10);
+        List<String> tags = new ArrayList<String>();
+        Random rand5 = new Random();
+        int iloscTagow = rand5.nextInt(10 - 2) + 2;
+        for (int i = 0; i < iloscTagow; i++) {
+            Random rand6 = new Random();
+            int indeks6 = rand6.nextInt(strTagi.length - 2) + 2;
+            String s = strTagi[indeks6];
+            if (!tags.contains(s)) {
+                tags.add(new String(s));
+            }
+        }
+        System.out.println(iloscTagow);
+        for (int i = 0 ; i < tags.size(); i++) {
+            System.out.println(i + "    " + tags.get(i));
+        }
     }
     
 }
